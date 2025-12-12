@@ -170,7 +170,76 @@ public class Main {
     private void status(String msg) {
         statusLabel.setText(msg);
     }
-}
+
+
+    // Workout operations
+    private void createNewWorkout() {
+        String name = JOptionPane.showInputDialog(frame, "Enter workout name:", "New Workout", JOptionPane.PLAIN_MESSAGE);
+        if (name != null && !name.trim().isEmpty()) {
+            Workout w = new Workout(name.trim(), LocalDate.now().toString());
+            workouts.add(w);
+            refreshWorkoutListModel();
+            workoutJList.setSelectedIndex(workouts.size()-1);
+            workoutTableModel.setWorkout(w);
+            saveData();
+            status("Created workout: " + name);
+        }
+    }
+
+    private void deleteSelectedWorkout() {
+        int idx = workoutJList.getSelectedIndex();
+        if (idx >= 0) {
+            int confirm = JOptionPane.showConfirmDialog(frame, "Delete selected workout?", "Confirm", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                workouts.remove(idx);
+                refreshWorkoutListModel();
+                workoutTableModel.setWorkout(null);
+                saveData();
+                status("Deleted workout.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "No workout selected.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void renameSelectedWorkout() {
+        int idx = workoutJList.getSelectedIndex();
+        if (idx >= 0) {
+            String current = workouts.get(idx).name;
+            String name = JOptionPane.showInputDialog(frame, "Rename workout:", current);
+            if (name != null && !name.trim().isEmpty()) {
+                workouts.get(idx).name = name.trim();
+                refreshWorkoutListModel();
+                saveData();
+                status("Renamed workout.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "No workout selected.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void refreshWorkoutListModel() {
+        if (workoutListModel == null) workoutListModel = new DefaultListModel<>();
+        workoutListModel.clear();
+        for (Workout w : workouts) {
+            workoutListModel.addElement(w.name + " (" + w.date + ")");
+        }
+        if (workoutJList != null && !workouts.isEmpty()) workoutJList.setSelectedIndex(0);
+    }
+
+    private void openWorkoutDetailWindow(Workout workout) {
+        JFrame detail = new JFrame("Workout: " + workout.name);
+        detail.setSize(600,400);
+        detail.setLocationRelativeTo(frame);
+
+        JPanel p = new JPanel(new BorderLayout(5,5));
+        WorkoutTableModel model = new WorkoutTableModel();
+        model.setWorkout(workout);
+        JTable table = new JTable(model);
+        JScrollPane sc = new JScrollPane(table);
+        p.add(sc, BorderLayout.CENTER);
+
+    }
 
 class Workout {}
 class Exercise {}
