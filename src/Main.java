@@ -324,4 +324,54 @@ public class Main {
             JOptionPane.showMessageDialog(frame, "Select a workout and an exercise row to remove.");
         }
     }
+    // Exercise Details
+    private Exercise showExerciseDialog(Exercise existing) {
+        JTextField nameField = new JTextField();
+        JTextField setsField = new JTextField();
+        JTextField repsField = new JTextField();
+        JTextField weightField = new JTextField();
+        if (existing != null) {
+            nameField.setText(existing.name);
+            setsField.setText(String.valueOf(existing.sets));
+            repsField.setText(String.valueOf(existing.reps));
+            weightField.setText(existing.weight);
+        }
+
+        JPanel panel = new JPanel(new GridLayout(0,1,5,5));
+        panel.add(new JLabel("Exercise name:"));
+        panel.add(nameField);
+        panel.add(new JLabel("Sets (integer):"));
+        panel.add(setsField);
+        panel.add(new JLabel("Reps (integer):"));
+        panel.add(repsField);
+        panel.add(new JLabel("Weight (e.g., 60 or bodyweight):"));
+        panel.add(weightField);
+
+        int result = JOptionPane.showConfirmDialog(frame, panel,
+                existing == null ? "Add Exercise" : "Edit Exercise",
+                JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                String name = nameField.getText().trim();
+                int sets = Integer.parseInt(setsField.getText().trim());
+                int reps = Integer.parseInt(repsField.getText().trim());
+                String weight = weightField.getText().trim();
+
+                if (name.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "Exercise name cannot be empty.");
+                    return null;
+                }
+
+                return new Exercise(name, sets, reps, weight);
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(frame, "Sets and reps must be whole numbers.");
+                return null;
+            }
+        }
+
+        return null;
+    }
+
 }
