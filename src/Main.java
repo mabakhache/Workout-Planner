@@ -373,5 +373,24 @@ public class Main {
 
         return null;
     }
+    // Profile
+    private void openProfileDialog() {
+        JTextField nameField = new JTextField(profile.name);
+        JTextField ageField = new JTextField(String.valueOf(profile.age));
+        JTextField heightField = new JTextField(String.valueOf(profile.height));
+        JTextField weightField = new JTextField(String.valueOf(profile.weight));
+        JTextField rmField = new JTextField(String.valueOf(profile.oneRepMax));
+
+        JPanel p = new JPanel(new GridLayout(0, 1, 5, 5));
+        p.add(new JLabel("Name:"));
+        p.add(nameField);
+        p.add(new JLabel("Age:"));
+        p.add(ageField);
+        p.add(new JLabel("Height (cm):"));
+        p.add(heightField);
+        p.add(new JLabel("Weight (kg):"));
+        p.add(weightField);
+        p.add(new JLabel("1RM Estimate (kg):"));
+        p.add(rmField);
 
 }
