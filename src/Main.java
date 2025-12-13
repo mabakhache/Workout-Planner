@@ -239,11 +239,89 @@ public class Main {
         JScrollPane sc = new JScrollPane(table);
         p.add(sc, BorderLayout.CENTER);
 
+        JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton addBtn = new JButton("Add Exercise");
+        JButton editBtn = new JButton("Edit Exercise");
+        JButton remBtn = new JButton("Remove Exercise");
+        btns.add(addBtn);
+        btns.add(editBtn);
+        btns.add(remBtn);
+        p.add(btns, BorderLayout.SOUTH);
+
+        addBtn.addActionListener(e -> {
+            Exercise ex = showExerciseDialog(null);
+            if (ex != null) {
+                workout.exercises.add(ex);
+                model.fireTableDataChanged();
+                saveData();
+            }
+        });
+        editBtn.addActionListener(e -> {
+            int r = table.getSelectedRow();
+            if (r >= 0) {
+                Exercise old = workout.exercises.get(r);
+                Exercise updated = showExerciseDialog(old);
+                if (updated != null) {
+                    workout.exercises.set(r, updated);
+                    model.fireTableDataChanged();
+                    saveData();
+                }
+            } else JOptionPane.showMessageDialog(detail, "Select an exercise to edit.");
+        });
+        remBtn.addActionListener(e -> {
+            int r = table.getSelectedRow();
+            if (r >= 0) {
+                workout.exercises.remove(r);
+                model.fireTableDataChanged();
+                saveData();
+            } else JOptionPane.showMessageDialog(detail, "Select an exercise to remove.");
+        });
+
+        detail.getContentPane().add(p);
+        detail.setVisible(true);
     }
 
-class Workout {}
-class Exercise {}
-class Profile {}
-class WorkoutTableModel extends AbstractTableModel {
-    // write in later
+    private void addExerciseToSelectedWorkout() {
+        int idx = workoutJList.getSelectedIndex();
+        if (idx >= 0) {
+            Exercise ex = showExerciseDialog(null);
+            if (ex != null) {
+                workouts.get(idx).exercises.add(ex);
+                workoutTableModel.fireTableDataChanged();
+                saveData();
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "No workout selected.");
+        }
+    }
+
+    private void editSelectedExercise() {
+        int idx = workoutJList.getSelectedIndex();
+        int row = exerciseTable.getSelectedRow();
+        if (idx >= 0 && row >= 0) {
+            Workout w = workouts.get(idx);
+            Exercise old = w.exercises.get(row);
+            Exercise updated = showExerciseDialog(old);
+            if (updated != null) {
+                w.exercises.set(row, updated);
+                workoutTableModel.fireTableDataChanged();
+                saveData();
+            }
+        } else {
+            JOptionPane.showMessageDialog(frame, "Select a workout and an exercise row to edit.");
+        }
+    }
+
+    private void removeSelectedExercise() {
+        int idx = workoutJList.getSelectedIndex();
+        int row = exerciseTable.getSelectedRow();
+        if (idx >= 0 && row >= 0) {
+            Workout w = workouts.get(idx);
+            w.exercises.remove(row);
+            workoutTableModel.fireTableDataChanged();
+            saveData();
+        } else {
+            JOptionPane.showMessageDialog(frame, "Select a workout and an exercise row to remove.");
+        }
+    }
 }
