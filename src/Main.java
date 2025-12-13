@@ -460,5 +460,38 @@ public class Main {
             JOptionPane.showMessageDialog(frame, "Error loading data.");
         }
     }
+    // Data Models
+    static class Workout {
+        String name;
+        String date;
+        List<Exercise> exercises = new ArrayList<>();
+
+        Workout(String name, String date) {
+            this.name = name;
+            this.date = date;
+        }
+    }
+
+    class Exercise {
+        String name;
+        int sets;
+        int reps;
+        String weight;
+
+        Exercise(String name, int sets, int reps, String weight) {
+            this.name = name;
+            this.sets = sets;
+            this.reps = reps;
+            this.weight = weight;
+        }
+    }
+
+    static class Profile {
+        String name = "";
+        int age = 0;
+        double height = 0;
+        double weight = 0;
+        double oneRepMax = 0;
+    }
 
 }
