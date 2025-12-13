@@ -393,4 +393,23 @@ public class Main {
         p.add(new JLabel("1RM Estimate (kg):"));
         p.add(rmField);
 
+        int res = JOptionPane.showConfirmDialog(frame, p, "Profile", JOptionPane.OK_CANCEL_OPTION);
+        if (res == JOptionPane.OK_OPTION) {
+            try {
+                profile.name = nameField.getText().trim();
+                profile.age = Integer.parseInt(ageField.getText().trim());
+                profile.height = Double.parseDouble(heightField.getText().trim());
+                profile.weight = Double.parseDouble(weightField.getText().trim());
+                profile.oneRepMax = Double.parseDouble(rmField.getText().trim());
+
+                saveData();
+                status("Profile updated.");
+
+                showCalorieRecommendation();
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(frame, "Invalid number input.");
+            }
+        }
+    }
 }
