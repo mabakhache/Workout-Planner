@@ -493,5 +493,50 @@ public class Main {
         double weight = 0;
         double oneRepMax = 0;
     }
+    // Table Model
+    static class WorkoutTableModel extends AbstractTableModel {
+
+        private Workout workout;
+
+        private final String[] columns = {
+                "Exercise", "Sets", "Reps", "Weight"
+        };
+
+        public void setWorkout(Workout w) {
+            this.workout = w;
+            fireTableDataChanged();
+        }
+
+        @Override
+        public int getRowCount() {
+            if (workout == null) return 0;
+            return workout.exercises.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return columns.length;
+        }
+
+        @Override
+        public String getColumnName(int col) {
+            return columns[col];
+        }
+
+        @Override
+        public Object getValueAt(int row, int col) {
+            Exercise e = workout.exercises.get(row);
+            return switch (col) {
+                case 0 -> e.name;
+                case 1 -> e.sets;
+                case 2 -> e.reps;
+                case 3 -> e.weight;
+                default -> "";
+            };
+        }
+    }
+}
+
+
 
 }
