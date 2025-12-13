@@ -427,5 +427,38 @@ public class Main {
                         "Lose Weight: " + (int) lose + " kcal/day",
                 "Calories", JOptionPane.INFORMATION_MESSAGE);
     }
+    // Save & Load
+    private void saveData() {
+        try (FileWriter writer = new FileWriter(DATA_FILE)) {
+            JsonObject root = new JsonObject();
+
+            root.add("profile", gson.toJsonTree(profile));
+            root.add("workouts", gson.toJsonTree(workouts));
+
+            gson.toJson(root, writer);
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(frame, "Error saving data.");
+        }
+    }
+
+    private void loadData() {
+        if (!Files.exists(Paths.get(DATA_FILE))) return;
+
+        try (FileReader reader = new FileReader(DATA_FILE)) {
+            JsonObject root = gson.fromJson(reader, JsonObject.class);
+
+            if (root.has("profile")) {
+                profile = gson.fromJson(root.get("profile"), Profile.class);
+            }
+            if (root.has("workouts")) {
+                Type wt = new TypeToken<List<Workout>>() {}.getType();
+                workouts = gson.fromJson(root.get("workouts"), wt);
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(frame, "Error loading data.");
+        }
+    }
 
 }
