@@ -412,4 +412,20 @@ public class Main {
             }
         }
     }
+    private void showCalorieRecommendation() {
+        // Mifflin–St Jeor estimate
+        double bmr = 10 * profile.weight + 6.25 * profile.height - 5 * profile.age + 5;
+
+        double maintain = bmr * 1.4;  // light activity default
+        double gain = maintain * 1.15;
+        double lose = maintain * 0.85;
+
+        JOptionPane.showMessageDialog(frame,
+                "Caloric Recommendations:\n\n" +
+                        "Maintain Weight: " + (int) maintain + " kcal/day\n" +
+                        "Gain Muscle: " + (int) gain + " kcal/day\n" +
+                        "Lose Weight: " + (int) lose + " kcal/day",
+                "Calories", JOptionPane.INFORMATION_MESSAGE);
+    }
+
 }
